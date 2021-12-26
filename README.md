@@ -1,5 +1,6 @@
 [course vide](https://www.youtube.com/watch?v=q5J5ho7YUhA)
 [Firebase quickstart article](https://fireship.io/lessons/firebase-quickstart/)
+[source code](https://github.com/fireship-io/3.1-firebase-basics)
 
 # Setup
 
@@ -76,3 +77,34 @@
 - `firebase serve` or `firebase emulators:start`, now you shoud see your site at http://localhost:5000
 
 **Commit 1**
+
+# Deploy
+
+- `firebase deploy`
+  - `Error: Must supply a "public" directory when using "destination" rewrites.` (mistake in `firebase init` processs
+  - remedied situation by changing `"public": "",` to `"public": "public",` in firebase.json
+
+```
+  Deploy complete!
+
+  Project Console: https://console.firebase.google.com/project/fireship-demos-87aa8/overview
+  Hosting URL: https://fireship-demos-87aa8.web.app
+```
+
+# user authentication
+
+## add user
+
+- firebase console -> Authentication -> Sign-in method, to active email/passoword -> add 003 yahoo with usual pw
+- also activated Google sign-in method
+
+## add signin / signout button
+
+- `index.html`
+- `app.js`
+
+- test run
+  - `firebase serve`
+  - click "sign in with Google" at localhost, then "sign out"...
+
+**Commit 2**
