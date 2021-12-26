@@ -1,6 +1,10 @@
-[course vide](https://www.youtube.com/watch?v=q5J5ho7YUhA)
-[Firebase quickstart article](https://fireship.io/lessons/firebase-quickstart/)
-[source code](https://github.com/fireship-io/3.1-firebase-basics)
+- [course vide](https://www.youtube.com/watch?v=q5J5ho7YUhA)
+- [Firebase quickstart article](https://fireship.io/lessons/firebase-quickstart/)
+- [source code](https://github.com/fireship-io/3.1-firebase-basics)
+
+- Firebase is the **most popular BaaS** (backend-as-a-service) in the world
+
+- This video uses only plain Javascript, no frames such as **React**
 
 # Setup
 
@@ -108,3 +112,58 @@
   - click "sign in with Google" at localhost, then "sign out"...
 
 **Commit 2**
+
+# Firestore
+
+- Out of box, firebase provides two noSQL databases: **Realtime Database** and **Cloud Firestore**; we'll focus on the latter, which tends to be the better option for most use cases.
+- it is very similar to MongoDB, which is a **document-oriented database**.
+  - collection - documents - data
+  - no schema
+    - database is flexible and easy to use
+    - but also easy to make mistake in **data modeling**
+
+## enable firstore
+
+- Firestore Database -> Create database -> Start in test mode (anyone can read/write, need to set security rules within 30days)
+
+## Data model
+
+- start a collection called `things`
+- click AutoID to create an ID for the collection
+- enter a few entries: (field, type, value)
+
+  - name, string, potato
+  - weight, number, 10
+
+## Writing to database
+
+- [Faker.js](https://github.com/marak/Faker.js/): generate massive amounts of fake data in the browser and node.js
+
+- two things need to access firestore in realtime
+
+  - a reference pointing to the document or collection you want to access (here it is `thingsRef`)
+  - to read data in realtime, our front end will always react to the changes on the server, which means we are subscribed to the stream of changes happening in the database. so we need a second variable (`unsubscribe`) to tell the app when to stop listening to this realtime stream.
+
+- `add()`, create a new document to the collection, automatically generate a unique doc id
+- for consistent time stamp, use firestore field value server time stamp `serverTimestamp()`, instead of regular JavaScript date object `Date.now()` (which is not consisten on every machine)
+
+## Listening to a realtime query
+
+- a query has an `onSnapshot()` method that fires a callback function whenever the underlying data changes
+
+## Composite index
+
+- Certain queries (e.g. combining a where method using == with a range operator like < or orderBy) can only be performed if an index is in place. The browser console with throw an error with a link you can follow you to create the necessary index.
+
+- test run
+  - at localhost website, when we click `Create Random Thing`, product name will appear on top of it
+  - when we delete the document from firestore console, the corresponding product name will disappear realtime from localhost website
+
+## Security rules
+
+- Firebase console -> Firestore Database -> Rules
+  - protect the entire database to set read/write to false `allow read, write: if false;`
+  - `allow write: if request.auth.uid == request.resource.data;` (current user's id need to match the user id they want to save to the database; which prevent this user to create document for any other user)
+  - `allow read: if request.auth.uid == resource.data.uid;` (current user can only read documents that associated with his id)
+
+**Commit 3**
